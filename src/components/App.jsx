@@ -11,20 +11,23 @@ class App extends React.Component{
     super(props);
     this.state = {
       life: 100,
-      food: 10,
-      happiness: 50,
-      sleep: 70
+      food: 100,
+      happiness: 100,
+      sleep: 100
     }
+    this.handleMakeSleep=this.handleMakeSleep.bind(this);
+    this.handleMakeEat=this.handleMakeEat.bind(this);
+    this.handleMakeHappiness=this.handleMakeHappiness.bind(this);
   }
 
   componentDidMount() {
       setInterval(()=>this.sadness(),3000);
-      setInterval(()=>this.decreaseFood(),2000);
-      setInterval(()=>this.decreaseSleep(),5000);
+      setInterval(()=>this.decreaseFood(),1000);
+      setInterval(()=>this.decreaseSleep(),2000);
   }
 
   componentDidUpdate(){
-    if(this.state.food <= 0){
+    if(this.state.food <= 0 || this.state.sleep <=0 || this.state.happiness <= 0 || this.state.life < 100){
       setTimeout(()=>this.hurt(),2000);
     }
   }
@@ -32,7 +35,7 @@ class App extends React.Component{
   sadness(){
       let newHappiness = this.state.happiness;
       if (this.state.happiness > 0){
-        newHappiness-=1;
+        newHappiness-=10;
         this.setState({happiness:newHappiness});
       }
   }
@@ -68,13 +71,31 @@ class App extends React.Component{
       this.setState({life:newLife})
     } else if ((this.state.food > 0 && this.state.happiness > 0  && this.state.sleep > 0 && this.state.life < 100)){
       let newLife = this.state.life;
-      newLife+=0.5;
+      newLife += 0.25;
       this.setState({life:newLife})
     } else if (this.state.life == 0 ){
 
     }
-
   }
+
+  handleMakeSleep(){
+    let newSleep = this.state.sleep;
+    newSleep+=8;
+    this.setState({sleep:newSleep})
+  }
+
+  handleMakeEat(){
+    let newFood = this.state.food;
+    newFood+=5;
+    this.setState({food:newFood})
+  }
+
+  handleMakeHappiness() {
+    let newHappiness = this.state.happiness;
+    newHappiness+=10;
+    this.setState({happiness:newHappiness})
+  }
+
 
   render(){
     return (
@@ -89,9 +110,9 @@ class App extends React.Component{
         <img src="https://vignette.wikia.nocookie.net/tamagotchi/images/6/61/Hapihapitchi_anime.PNG/revision/latest?cb=20110919001912"></img>
 
       <Life newLife = {this.state.life}/>
-      <Food newFood = {this.state.food}/>
-      <Happiness newHappiness = {this.state.happiness}/>
-      <Sleep newSleep = {this.state.sleep}/>
+      <Food newFood = {this.state.food} onMakeEat= {this.handleMakeEat}/>
+      <Happiness newHappiness = {this.state.happiness} onMakeHappiness = {this.handleMakeHappiness}/>
+      <Sleep newSleep = {this.state.sleep} onMakeSleep = {this.handleMakeSleep}/>
 
       </div>
     )
