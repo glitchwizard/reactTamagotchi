@@ -21,9 +21,9 @@ class App extends React.Component{
   }
 
   componentDidMount() {
-      setInterval(()=>this.sadness(),3000);
-      setInterval(()=>this.decreaseFood(),1000);
-      setInterval(()=>this.decreaseSleep(),2000);
+      setInterval(()=>this.sadness(),30000);
+      setInterval(()=>this.decreaseFood(),10000);
+      setInterval(()=>this.decreaseSleep(),20000);
   }
 
   componentDidUpdate(){
@@ -102,12 +102,78 @@ class App extends React.Component{
       <div>
         <style jsx>{`
             img {
-              max-width: 200px;
+              width: 100%;
+
             }
+
+            .gameUnit {
+              background-color: red;
+              border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+              height: 450px;
+              width: 25%;
+
+              border: 10px solid red;
+              margin: auto;
+              display: block;
+              text-align: center;
+              position: relative;
+            }
+
+            .gameDisplay{
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              background-color: white;
+              padding: 20px;
+              border-radius: 50px;
+              border: 10px solid gray;
+              width: 55%;
+            }
+
+            .button{
+              border-radius: 50%;
+              background-color: green;
+              border: 2px solid #4CAF50;
+              padding: 15px;
+              display: inline-block;
+              cursor: pointer;
+              position: absolute;
+              bottom: 5%;
+              transform: translate(-50%, -50%);
+            }
+
+            .button:active{
+              opacity:0.5;
+              border: 2px solid #4CAF50;
+            }
+
+            .middle{
+              bottom: 5%;
+              left: 50%;
+            }
+
+            .right{
+              bottom: 10%;
+              left: 70%;
+            }
+
+            .left{
+              bottom: 10%;
+              left: 30%;
+            }
+
               `}
         </style>
         <h1>Welcome to your Tamagotchi!</h1>
-        <img src="https://vignette.wikia.nocookie.net/tamagotchi/images/6/61/Hapihapitchi_anime.PNG/revision/latest?cb=20110919001912"></img>
+        <div className="gameUnit">
+          <div className="gameDisplay">
+            <img src="https://66.media.tumblr.com/437aa40da752cbdc55b000630ab0e387/tumblr_pc891wGELY1uon9hao1_250.gif" />
+          </div>
+          <button className="button left"></button>
+            <button className="button middle"></button>
+          <button className="button right"></button>
+        </div>
 
       <Life newLife = {this.state.life}/>
       <Food newFood = {this.state.food} onMakeEat= {this.handleMakeEat}/>
