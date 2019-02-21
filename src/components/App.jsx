@@ -15,6 +15,7 @@ class App extends React.Component{
       happiness: 100,
       sleep: 100,
       foodToggle: false,
+      foodStillBelowThreshold: false,
       foodToggleClassName: "foodIconHide",
       classChecks: 0
     }
@@ -28,29 +29,39 @@ class App extends React.Component{
         this.sadness();
         this.decreaseFood();
         this.decreaseSleep();
-      },1000);
+      },2000);
   }
 
   componentDidUpdate(){
-    setTimeout(()=>{
-      if(this.state.food <= 0 || this.state.sleep <=0 || this.state.happiness <= 0 || this.state.life < 100){
+    if(this.state.food <= 0 || this.state.sleep <=0 || this.state.happiness <= 0 || this.state.life < 100){
+      setTimeout(()=>{
         this.hurt();
-      }
+      }, 1000)
+    }
 
-      if (this.state.food <=50){
-        this.toggleIcon();
-        console.log("");
-        console.log('timeout running');
-        let newClassChecks = this.state.classChecks;
-        newClassChecks += 1;
-        this.setState({classChecks : newClassChecks});
-        console.log("newClassChecks: " + newClassChecks);
-      }
+    if (this.state.food <=50){
+      setTimeout(()=>{
+        let newFoodStillBelow = true;
+        this.setState({foodStillBelowThreshold : newFoodStillBelow});
+        if (foodStillBelowThreshold) {
+          this.toggleIcon();
+          console.log("");
+          console.log('timeout running');
+          let newClassChecks = this.state.classChecks;``
+          newClassChecks += 1;
+          this.setState({classChecks : newClassChecks});
+          console.log("newClassChecks: " + newClassChecks);
+        }
+      }, 1000);
+    }
 
-      if (this.state.food > 50 && this.state.foodToggleClassName === "foodIconShow") {
+
+
+    if (this.state.food > 50 && this.state.foodToggleClassName === "foodIconShow") {
+      setTimeout(()=>{
         this.setState({foodToggleClassName: "foodIconHide"})
-      }
-    }, 100000)
+      }, 1000);
+    }
   }
 
   sadness(){
@@ -118,13 +129,7 @@ class App extends React.Component{
   }
 
   toggleIcon(){
-    setTimeout(() => {
       let currentToggle = this.state.foodToggle;
-      // console.log('ToggleIcon running');
-      // console.log(this.state.foodToggle);
-      // console.log('');
-      // console.log('currentToggle');
-      // console.log(currentToggle);
       if (currentToggle === false){
         this.setState({
           foodToggleClassName: "foodIconShow",
@@ -136,9 +141,6 @@ class App extends React.Component{
           foodToggle: false
         });
       }
-    }
-
-  ,5000);
 
   }
 
@@ -250,8 +252,8 @@ class App extends React.Component{
         <div className="gameUnit">
           <div className="gameDisplay">
             <img className={'icons ' + this.state.foodToggleClassName} src="https://banner2.kisspng.com/20180404/syq/kisspng-fizzy-drinks-computer-icons-meal-food-lunch-food-icon-5ac500dc6676c0.3955393615228602524197.jpg" />
-            <img className="icons sadIconHide" src="https://c7.uihere.com/files/244/263/782/happiness-computer-icons-emoticon-50.jpg" />
-            <img className= "icons sleepIconHide" src="https://static.thenounproject.com/png/29979-200.png" />
+            <img className="icons sadIconShow" src="https://c7.uihere.com/files/244/263/782/happiness-computer-icons-emoticon-50.jpg" />
+            <img className= "icons sleepIconShow" src="https://static.thenounproject.com/png/29979-200.png" />
             <img src="https://66.media.tumblr.com/437aa40da752cbdc55b000630ab0e387/tumblr_pc891wGELY1uon9hao1_250.gif" />
           </div>
           <button className="button left blinking" onClick={this.handleMakeEat}></button>
