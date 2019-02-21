@@ -10,10 +10,13 @@ class App extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      life: 100,
-      food: 100,
+      life: 50,
+      food: 52,
       happiness: 100,
-      sleep: 100
+      sleep: 100,
+      foodToggle: false,
+      foodToggleClassName: "foodIconHide",
+      classChecks: 0
     }
     this.handleMakeSleep=this.handleMakeSleep.bind(this);
     this.handleMakeEat=this.handleMakeEat.bind(this);
@@ -21,21 +24,39 @@ class App extends React.Component{
   }
 
   componentDidMount() {
-      setInterval(()=>this.sadness(),30000);
-      setInterval(()=>this.decreaseFood(),10000);
-      setInterval(()=>this.decreaseSleep(),20000);
+      setInterval(()=>{
+        this.sadness();
+        this.decreaseFood();
+        this.decreaseSleep();
+      },1000);
   }
 
   componentDidUpdate(){
-    if(this.state.food <= 0 || this.state.sleep <=0 || this.state.happiness <= 0 || this.state.life < 100){
-      setTimeout(()=>this.hurt(),2000);
-    }
+    setTimeout(()=>{
+      if(this.state.food <= 0 || this.state.sleep <=0 || this.state.happiness <= 0 || this.state.life < 100){
+        this.hurt();
+      }
+
+      if (this.state.food <=50){
+        this.toggleIcon();
+        console.log("");
+        console.log('timeout running');
+        let newClassChecks = this.state.classChecks;
+        newClassChecks += 1;
+        this.setState({classChecks : newClassChecks});
+        console.log("newClassChecks: " + newClassChecks);
+      }
+
+      if (this.state.food > 50 && this.state.foodToggleClassName === "foodIconShow") {
+        this.setState({foodToggleClassName: "foodIconHide"})
+      }
+    }, 100000)
   }
 
   sadness(){
       let newHappiness = this.state.happiness;
       if (this.state.happiness > 0){
-        newHappiness-=10;
+        newHappiness-=1;
         this.setState({happiness:newHappiness});
       }
   }
@@ -43,7 +64,7 @@ class App extends React.Component{
   decreaseFood() {
     let newFood = this.state.food;
     if (this.state.food > 0 ){
-      newFood-=2;
+      newFood-=1;
       this.setState({food:newFood})
     }
   }
@@ -51,7 +72,7 @@ class App extends React.Component{
   decreaseSleep() {
     let newSleep = this.state.sleep;
     if (this.state.sleep > 0) {
-      newSleep-=2;
+      newSleep-=1;
       this.setState({sleep:newSleep})
     }
   }
@@ -94,6 +115,31 @@ class App extends React.Component{
     let newHappiness = this.state.happiness;
     newHappiness+=10;
     this.setState({happiness:newHappiness})
+  }
+
+  toggleIcon(){
+    setTimeout(() => {
+      let currentToggle = this.state.foodToggle;
+      // console.log('ToggleIcon running');
+      // console.log(this.state.foodToggle);
+      // console.log('');
+      // console.log('currentToggle');
+      // console.log(currentToggle);
+      if (currentToggle === false){
+        this.setState({
+          foodToggleClassName: "foodIconShow",
+          foodToggle: true
+        })
+      } else if (currentToggle === true){
+        this.setState({
+          foodToggleClassName: "foodIconHide",
+          foodToggle: false
+        });
+      }
+    }
+
+  ,5000);
+
   }
 
 
@@ -163,16 +209,54 @@ class App extends React.Component{
               left: 30%;
             }
 
+            .icons{
+              width: 25px;
+              display: inline-block;
+              padding-bottom: 25px;
+              margin-right: 15px;
+            }
+
+            .blinking{
+              animation:blinkingText 0.8s infinite;
+            }
+
+            .sadIconHide {
+              opacity: 0;
+            }
+
+            .sleepIconHide {
+              opacity: 0;
+            }
+
+            .foodIconHide {
+              opacity: 0;
+            }
+
+            .sadIconShow {
+              opacity: 1;
+            }
+
+            .sleepIconShow {
+              opacity: 1;
+            }
+
+            .foodIconShow {
+              opacity: 1;
+            }
               `}
         </style>
         <h1>Welcome to your Tamagotchi!</h1>
+        <p>{this.state.foodToggleClassName}!!!!</p>
         <div className="gameUnit">
           <div className="gameDisplay">
+            <img className={'icons ' + this.state.foodToggleClassName} src="https://banner2.kisspng.com/20180404/syq/kisspng-fizzy-drinks-computer-icons-meal-food-lunch-food-icon-5ac500dc6676c0.3955393615228602524197.jpg" />
+            <img className="icons sadIconHide" src="https://c7.uihere.com/files/244/263/782/happiness-computer-icons-emoticon-50.jpg" />
+            <img className= "icons sleepIconHide" src="https://static.thenounproject.com/png/29979-200.png" />
             <img src="https://66.media.tumblr.com/437aa40da752cbdc55b000630ab0e387/tumblr_pc891wGELY1uon9hao1_250.gif" />
           </div>
-          <button className="button left"></button>
-            <button className="button middle"></button>
-          <button className="button right"></button>
+          <button className="button left blinking" onClick={this.handleMakeEat}></button>
+            <button className="button middle" onClick={this.handleMakeHappiness}></button>
+          <button className="button right" onClick={this.handleMakeSleep}></button>
         </div>
 
       <Life newLife = {this.state.life}/>
